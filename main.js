@@ -1,11 +1,24 @@
+// Set deck id
+
 let deckId = "";
 
-function handleClick() {
-  fetch("https://apis.scrimba.com/deckofcards/api/deck/new/shuffle/")
-    .then((res) => res.json())
-    .then((data) => {
-      deckId = data.deck_id;
-    });
+async function getDeckId() {
+  if (!deckId) {
+    deckId = await fetch(
+      "https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1"
+    )
+      .then((res) => res.json())
+      .then((data) => data.deck_id);
+  }
+
+  return deckId;
 }
 
-document.getElementById("new-deck").addEventListener("click", handleClick);
+// Draw cards
+document.getElementById("draw-cards").addEventListener("click", async () => {
+  const deckId = await getDeckId();
+
+  fetch(`https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=2`)
+    .then((response) => response.json())
+    .then((data) => console.log(data));
+});
