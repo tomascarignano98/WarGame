@@ -6,6 +6,7 @@ const container1 = document.querySelector("#card-container1");
 const container2 = document.querySelector("#card-container2");
 const computerScoreEl = document.querySelector("#computer-score");
 const myScoreEl = document.querySelector("#my-score");
+const remaining = document.querySelector("#remaining");
 const title = document.querySelector("h1");
 
 // Set deck id
@@ -47,6 +48,7 @@ document.getElementById("draw-cards").addEventListener("click", async () => {
       // Update points
       setTimeout(() => {
         renderPoints(winner);
+        remaining.textContent = data.remaining / 2;
       }, 1000);
 
       // Check if deck is empty
