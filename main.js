@@ -42,29 +42,27 @@ document.getElementById("draw-cards").addEventListener("click", async () => {
       const card2 = data.cards[1];
       const winner = getWinner(card1.value, card2.value);
 
-      //
-      container1.innerHTML = `<img class="fade-first" src="${card1.image}"  />`;
-      container2.innerHTML = `<img class="fade-last" src="${card2.image}"  />`;
+      renderCards(card1, card2);
 
+      // Update points
       setTimeout(() => {
-        if (winner === 1) {
-          computerScore += 1;
-          computerScoreEl.innerHTML = computerScore;
-        } else if (winner === 2) {
-          myScore += 1;
-          myScoreEl.innerHTML = myScore;
-        }
+        renderPoints(winner);
       }, 1000);
 
+      // Check if deck is empty
       if (data.remaining === 0) {
         deckId = "";
 
-        if (computerScore > myScore) {
-          title.textContent = `Computer Wins!`;
-        } else title.textContent = `You Win!`;
+        setTimeout(getWarWinner, 2000);
       }
     });
 });
+
+// Render Card Images
+function renderCards(card1, card2) {
+  container1.innerHTML = `<img class="fade-first" src="${card1.image}"  />`;
+  container2.innerHTML = `<img class="fade-last" src="${card2.image}"  />`;
+}
 
 // Declare a winner
 const cardValues = {
@@ -93,4 +91,22 @@ function getWinner(card1, card2) {
   } else if (computer < me) {
     return 2;
   }
+}
+
+//
+function renderPoints(winner) {
+  if (winner === 1) {
+    computerScore += 1;
+    computerScoreEl.innerHTML = computerScore;
+  } else if (winner === 2) {
+    myScore += 1;
+    myScoreEl.innerHTML = myScore;
+  }
+}
+
+// Declare the winner of the entire game
+function getWarWinner() {
+  if (computerScore > myScore) {
+    title.textContent = `Computer Wins the War!`;
+  } else title.textContent = `You Win the War!`;
 }
