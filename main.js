@@ -1,4 +1,6 @@
-const container = document.querySelector(".container");
+// DOM elements
+const container1 = document.querySelector("#card-container1");
+const container2 = document.querySelector("#card-container2");
 
 // Set deck id
 
@@ -9,7 +11,7 @@ async function getDeckId() {
     deckId = await fetch(
       "https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1"
     )
-      .then((res) => res.json())
+      .then((response) => response.json())
       .then((data) => data.deck_id);
   }
 
@@ -25,10 +27,7 @@ document.getElementById("draw-cards").addEventListener("click", async () => {
     .then((data) => {
       console.log(data);
 
-      container.innerHTML = "";
-      container.innerHTML = `
-      <img class="fade-first" src="${data.cards[0].image}"  />
-      <img class="fade-last" src="${data.cards[1].image}"  />
-      `;
+      container1.innerHTML = `<img class="fade-first" src="${data.cards[0].image}"  />`;
+      container2.innerHTML = `<img class="fade-last" src="${data.cards[1].image}"  />`;
     });
 });
