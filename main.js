@@ -1,3 +1,5 @@
+const container = document.querySelector(".container");
+
 // Set deck id
 
 let deckId = "";
@@ -20,5 +22,13 @@ document.getElementById("draw-cards").addEventListener("click", async () => {
 
   fetch(`https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=2`)
     .then((response) => response.json())
-    .then((data) => console.log(data));
+    .then((data) => {
+      console.log(data);
+
+      container.innerHTML = "";
+      container.innerHTML = `
+      <img class="fade-first" src="${data.cards[0].image}"  />
+      <img class="fade-last" src="${data.cards[1].image}"  />
+      `;
+    });
 });
