@@ -39,7 +39,6 @@ p {
 }
 h1,
 h2 {
-  margin-bottom: 1rem;
   line-height: 1;
 }
 
@@ -49,10 +48,6 @@ h1 {
 
 h2 {
   font-size: 1.5em;
-}
-
-h3 {
-  font-size: 1.17em;
 }
 
 @media screen and (min-width: 1024px) {
@@ -69,23 +64,25 @@ body {
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
+  text-align: center;
 }
 
 /* Cards */
 
-.cards {
+.cards-container {
   display: flex;
   flex-direction: column;
   margin: 20px auto;
   row-gap: 10px;
 }
 
-.cards-container {
-  width: 226px;
-  height: 314px;
+.card {
+  --ht: 28rem;
+  border-radius: 1.3rem;
   border: 2px solid #133c19;
-  border-radius: 11px;
   box-sizing: content-box;
+  height: var(--ht);
+  width: calc(var(--ht) * 5 / 7);
 }
 
 img {
@@ -104,7 +101,7 @@ img {
   white-space: nowrap;
 }
 
-/* Animation */
+/* Animations */
 
 @keyframes fade-first {
   0% {
