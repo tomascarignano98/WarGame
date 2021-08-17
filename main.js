@@ -1,33 +1,96 @@
+let computerScore = 0;
+let myScore = 0;
+
 // DOM elements
 const container1 = document.querySelector("#card-container1");
 const container2 = document.querySelector("#card-container2");
+const computerScoreEl = document.querySelector("#computer-score");
+const myScoreEl = document.querySelector("#my-score");
+const title = document.querySelector("h1");
 
 // Set deck id
 
 let deckId = "";
 
-async function getDeckId() {
-  if (!deckId) {
-    deckId = await fetch(
-      "https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1"
-    )
-      .then((response) => response.json())
-      .then((data) => data.deck_id);
-  }
+async function getNewDeck() {
+  computerScore = 0;
+  myScore = 0;
+  computerScoreEl.innerHTML = computerScore;
+  myScoreEl.innerHTML = myScore;
+  title.textContent = `War!`;
 
-  return deckId;
+  deckId = await fetch(
+    "https://apis.scrimba.com/deckofcards/api/deck/new/shuffle/"
+  )
+    .then((response) => response.json())
+    .then((data) => data.deck_id);
 }
 
 // Draw cards
-document.getElementById("draw-cards").addEventListener("click", async () => {
-  const deckId = await getDeckId();
 
-  fetch(`https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=2`)
+document.getElementById("draw-cards").addEventListener("click", async () => {
+  if (!deckId) {
+    await getNewDeck();
+    // console.log(deckId);
+  }
+
+  fetch(`https://apis.scrimba.com/deckofcards/api/deck/${deckId}/draw/?count=2`)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
+      const card1 = data.cards[0];
+      const card2 = data.cards[1];
+      const winner = getWinner(card1.value, card2.value);
 
-      container1.innerHTML = `<img class="fade-first" src="${data.cards[0].image}"  />`;
-      container2.innerHTML = `<img class="fade-last" src="${data.cards[1].image}"  />`;
+      //
+      container1.innerHTML = `<img class="fade-first" src="${card1.image}"  />`;
+      container2.innerHTML = `<img class="fade-last" src="${card2.image}"  />`;
+
+      setTimeout(() => {
+        if (winner === 1) {
+          computerScore += 1;
+          computerScoreEl.innerHTML = computerScore;
+        } else if (winner === 2) {
+          myScore += 1;
+          myScoreEl.innerHTML = myScore;
+        }
+      }, 1000);
+
+      if (data.remaining === 0) {
+        deckId = "";
+
+        if (computerScore > myScore) {
+          title.textContent = `Computer Wins!`;
+        } else title.textContent = `You Win!`;
+      }
     });
 });
+
+// Declare a winner
+const cardValues = {
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5,
+  6: 6,
+  7: 7,
+  8: 8,
+  9: 9,
+  10: 10,
+  JACK: 11,
+  QUEEN: 12,
+  KING: 13,
+  ACE: 14
+};
+
+function getWinner(card1, card2) {
+  const computer = cardValues[card1];
+  const me = cardValues[card2];
+
+  if (computer > me) {
+    return 1;
+  } else if (computer < me) {
+    return 2;
+  }
+}
